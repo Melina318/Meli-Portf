@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio Professionnel</title>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#64748b'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        primary: '#3b82f6',
+        secondary: '#64748b',
+        dark: {
+          bg: '#0f172a',
+          card: '#1e293b',
+          text: '#e2e8f0',
+          border: '#334155'
+        }
+      },
+      borderRadius: {
+        'none': '0px',
+        'sm': '4px',
+        DEFAULT: '8px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        '2xl': '24px',
+        '3xl': '32px',
+        'full': '9999px',
+        'button': '8px'
+      }
+    }
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
@@ -80,9 +110,66 @@ transform: translateY(-10px);
 transform: translateY(-5px);
 }
 }
+
+/* Dark mode styles */
+.dark {
+  color-scheme: dark;
+}
+.dark body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+.dark .bg-white {
+  background-color: #1e293b;
+}
+.dark .text-gray-700 {
+  color: #e2e8f0;
+}
+.dark .text-gray-600 {
+  color: #cbd5e1;
+}
+.dark .border-gray-200 {
+  border-color: #334155;
+}
+.dark .bg-gray-50 {
+  background-color: #0f172a;
+}
+.dark .bg-gray-100 {
+  background-color: #1e293b;
+}
+.dark .shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+.dark .glass-effect {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(51, 65, 85, 0.5);
+}
+.dark .skill-tag {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+.dark .service-card {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+.dark input, .dark textarea {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+.dark input::placeholder, .dark textarea::placeholder {
+  color: #94a3b8;
+}
+.dark .custom-checkbox {
+  border-color: #334155;
+}
+.dark .custom-checkbox:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
 </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 transition-colors duration-200">
 <!-- Header/Navigation -->
 <header class="fixed top-0 left-0 right-0 z-50 bg-white bg-opacity-95 shadow-sm">
 <div class="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -94,6 +181,10 @@ transform: translateY(-5px);
 <a href="#certifications" class="text-gray-700 hover:text-primary font-medium transition-colors">Certifications</a>
 <a href="#competences" class="text-gray-700 hover:text-primary font-medium transition-colors">Compétences</a>
 <a href="#contact" class="text-gray-700 hover:text-primary font-medium transition-colors">Contact</a>
+<button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-border transition-colors">
+<i class="ri-sun-line dark:hidden text-xl text-gray-700"></i>
+<i class="ri-moon-line hidden dark:block text-xl text-gray-200"></i>
+</button>
 </nav>
 <button id="mobile-menu-button" class="md:hidden w-10 h-10 flex items-center justify-center text-gray-700">
 <i class="ri-menu-line ri-lg"></i>
@@ -108,6 +199,11 @@ transform: translateY(-5px);
 <a href="#certifications" class="text-gray-700 hover:text-primary font-medium py-2 transition-colors">Certifications</a>
 <a href="#competences" class="text-gray-700 hover:text-primary font-medium py-2 transition-colors">Compétences</a>
 <a href="#contact" class="text-gray-700 hover:text-primary font-medium py-2 transition-colors">Contact</a>
+<button id="theme-toggle-mobile" class="flex items-center text-gray-700 hover:text-primary font-medium py-2 transition-colors">
+<i class="ri-sun-line dark:hidden mr-2"></i>
+<i class="ri-moon-line hidden dark:block mr-2"></i>
+<span>Changer le thème</span>
+</button>
 </div>
 </div>
 </header>
@@ -916,6 +1012,35 @@ setTimeout(function() {
 successMessage.remove();
 }, 5000);
 });
+});
+</script>
+<script>
+// Theme toggle functionality
+const themeToggle = document.getElementById('theme-toggle');
+const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+const html = document.documentElement;
+
+// Check for saved theme preference
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+  html.classList.toggle('dark', savedTheme === 'dark');
+}
+
+// Theme toggle click handler for desktop
+themeToggle.addEventListener('click', () => {
+  html.classList.toggle('dark');
+  const isDark = html.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+// Theme toggle click handler for mobile
+themeToggleMobile.addEventListener('click', () => {
+  html.classList.toggle('dark');
+  const isDark = html.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  // Close mobile menu after theme change
+  document.getElementById('mobile-menu').classList.add('hidden');
+  document.getElementById('mobile-menu-button').innerHTML = '<i class="ri-menu-line ri-lg"></i>';
 });
 </script>
 </body>
